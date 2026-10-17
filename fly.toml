@@ -1,0 +1,11 @@
+app = "telegram-shop-final"
+primary_region = "iad"
+
+[processes]
+  app = "python run.py"
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory = "1gb"
+  memory_mb = 1024
