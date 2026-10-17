@@ -2,7 +2,7 @@ from typing import Callable, Any, Awaitable
 from aiogram import BaseMiddleware, Bot
 from aiogram.types import TelegramObject, Message, CallbackQuery
 from config import ADMIN_IDS
-from services.membership import check_all_channels
+import membership as check_member_module
 from user_kb import join_channels_kb
 
 SKIP_CALLBACKS = {"check_membership"}
@@ -25,7 +25,10 @@ class MembershipMiddleware(BaseMiddleware):
         if isinstance(event, CallbackQuery) and event.data in SKIP_CALLBACKS:
             return await handler(event, data)
 
-        missing = await check_all_channels(bot, user.id)
+        # چون فایل‌ها بیرون از پوشه هستن، اینجا به جای services.membership از اسم فایل استفاده می‌کنیم
+        from membership import check_all_channels as get_missing
+        missing = await get_missing(bot, user.id)
+        
         if missing:
             text = (
                 "🔒 برای استفاده از ربات، ابتدا در کانال(های) زیر عضو شوید:\n\n"
